@@ -37,7 +37,7 @@ const ProtectedRoute = ({ children }) => {
 
 function App() {
     return (
-        <Router>
+        <Router basename="/SHEMATTERS/">
             <ScrollToTop />
             <div className="flex flex-col min-h-screen">
                 <Navbar />
