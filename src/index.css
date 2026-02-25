@@ -1,0 +1,115 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary-light: #8e44ad;
+  --color-primary: #692D91;
+  /* Official Deep Purple */
+  --color-primary-dark: #2E0B55;
+
+  --color-secondary-light: #d854a9;
+  --color-secondary: #A82986;
+  /* Official Magenta */
+  --color-secondary-dark: #7d1c63;
+
+  --color-accent: #FFD700;
+
+  --font-heading: "Montserrat", sans-serif;
+  --font-body: "Poppins", sans-serif;
+
+  --animate-fade-in: fadeIn 0.5s ease-out forwards;
+  --animate-slide-up: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-float: float 6s ease-in-out infinite;
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    0% {
+      transform: translateY(30px);
+      opacity: 0;
+    }
+
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes float {
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+}
+
+:root {
+  --primary-purple: #692D91;
+  --secondary-magenta: #A82986;
+}
+
+@layer base {
+  body {
+    @apply font-body text-gray-900 bg-white;
+  }
+}
+
+@utility container {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+@utility btn {
+  @apply inline-flex items-center justify-center px-8 py-3 rounded-full font-semibold transition-all duration-300 transform active:scale-95 cursor-pointer;
+}
+
+@utility btn-primary {
+  @apply btn bg-gradient-to-r from-secondary to-primary text-white shadow-lg shadow-secondary/20 hover:shadow-secondary/40 hover:-translate-y-1;
+}
+
+@utility btn-outline {
+  @apply btn border-2 border-primary text-primary hover:bg-primary hover:text-white max-sm:px-4 max-sm:py-2 max-sm:text-xs;
+}
+
+@utility glass-nav {
+  @apply bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm;
+}
+
+@utility section-title {
+  @apply text-3xl md:text-5xl lg:text-6xl font-black text-primary mb-6 tracking-tighter;
+}
+
+@utility bg-mesh {
+  background-color: var(--primary-purple);
+  background-image:
+    radial-gradient(at 0% 0%, hsla(338, 78%, 31%, 1) 0, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(280, 70%, 40%, 1) 0, transparent 50%);
+}
+
+@utility text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-secondary to-primary;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-primary/30 rounded-full hover:bg-primary/50;
+}
