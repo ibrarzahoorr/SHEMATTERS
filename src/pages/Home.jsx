@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Users, Calendar, Globe, Target, ShieldCheck, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -24,41 +25,92 @@ const itemVariants = {
 };
 
 const Home = () => {
+    const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+
+    useEffect(() => {
+        const targetDate = new Date("April 2, 2026 00:00:00").getTime();
+
+        const timer = setInterval(() => {
+            const now = new Date().getTime();
+            const difference = targetDate - now;
+
+            if (difference > 0) {
+                setTimeLeft({
+                    days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+                    hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+                    minutes: Math.floor((difference / 1000 / 60) % 60),
+                    seconds: Math.floor((difference / 1000) % 60),
+                });
+            } else {
+                clearInterval(timer);
+            }
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, []);
+
+    const TimerUnit = ({ value, label }) => (
+        <div className="flex flex-col items-center">
+            <div className="w-20 h-20 md:w-24 md:h-24 flex items-center justify-center mb-2">
+                <span className="text-3xl md:text-4xl font-black text-white">{value.toString().padStart(2, '0')}</span>
+            </div>
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/60">{label}</span>
+        </div>
+    );
+
     return (
         <div className="w-full">
             {/* Cinematic Hero - Buttons positioned at the base to avoid banner text overlap */}
-            <section className="relative min-h-screen flex flex-col justify-end overflow-hidden pb-20 bg-primary">
+            <section className="relative min-h-screen flex flex-col justify-end overflow-hidden pb-[20px] bg-primary">
                 <div className="absolute inset-0 z-0">
                     <img
                         src={bannerImg}
                         alt="Women Empowerment Hero"
-                        className="w-full h-full object-cover object-center scale-100"
+                        className="w-full h-full object-cover object-top scale-100"
                     />
                     {/* Subtle gradient to ensure buttons are clickable/visible without obscuring the banner text */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/20 to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/40 to-transparent"></div>
                 </div>
 
-                <div className="container relative z-10 px-6">
-                    <motion.div
-                        variants={staggerContainer}
-                        initial="hidden"
-                        animate="visible"
-                        className="max-w-2xl mb-12"
-                    >
-                        <motion.div variants={itemVariants} className="flex flex-wrap gap-6 items-center">
-                            <Link to="/contact-us" className="btn bg-secondary text-white px-12 py-5 text-sm uppercase tracking-widest font-black shadow-[0_20px_50px_rgba(168,41,134,0.4)] hover:scale-105 transition-transform">
-                                Join Conference
-                            </Link>
-                            <Link to="/about-us" className="btn border-2 border-white text-white font-black px-12 py-5 text-sm uppercase tracking-widest hover:bg-white/10 backdrop-blur-md transition-all hover:scale-105">
-                                Learn Our Vision
-                            </Link>
+                <div className="container relative z-10 pl-6 pr-2 h-full flex flex-col justify-end pb-[20px]">
+                    <div className="flex flex-col lg:flex-row justify-between items-end gap-12">
+                        <motion.div
+                            variants={staggerContainer}
+                            initial="hidden"
+                            animate="visible"
+                            className="max-w-2xl"
+                        >
+                            <motion.div variants={itemVariants} className="flex flex-wrap gap-6 items-center">
+                                <Link to="/contact-us" className="btn bg-secondary text-white px-12 py-5 text-sm uppercase tracking-widest font-black shadow-[0_20px_50px_rgba(168,41,134,0.4)] hover:scale-105 transition-transform">
+                                    Join Conference
+                                </Link>
+                                <Link to="/about-us" className="btn border-2 border-white text-white font-black px-12 py-5 text-sm uppercase tracking-widest hover:bg-white/10 backdrop-blur-md transition-all hover:scale-105">
+                                    Learn Our Vision
+                                </Link>
+                            </motion.div>
                         </motion.div>
-                    </motion.div>
+
+                        {/* Countdown Timer - Shifted further Right & Down */}
+                        <motion.div
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.5, duration: 0.8 }}
+                            className="p-0 lg:-mr-12 lg:-mb-1"
+                        >
+                            <span className="text-secondary-light font-black tracking-[0.4em] uppercase text-[10px] mb-4 block text-center lg:text-right">Conference Countdown</span>
+                            <div className="flex gap-4 md:gap-6">
+                                <TimerUnit value={timeLeft.days} label="Days" />
+                                <TimerUnit value={timeLeft.hours} label="Hours" />
+                                <TimerUnit value={timeLeft.minutes} label="Mins" />
+                                <TimerUnit value={timeLeft.seconds} label="Secs" />
+                            </div>
+                        </motion.div>
+                    </div>
                 </div>
             </section>
 
             {/* Statistics Section - Clean layout, no negative margin overlap */}
-            <section className="py-24 bg-white relative">
+            <section className="py-[20px] bg-white relative">
                 <div className="container">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-10 relative z-20">
                         {[
@@ -86,7 +138,7 @@ const Home = () => {
             </section>
 
             {/* How Did We Start? Section */}
-            <section className="py-32 bg-white overflow-hidden">
+            <section className="py-[20px] bg-white overflow-hidden">
                 <div className="container">
                     <div className="flex flex-col lg:flex-row items-center gap-24 lg:gap-32">
                         {/* Image Side */}
@@ -101,7 +153,7 @@ const Home = () => {
                                     <img
                                         src="https://shemattersofficial.com/wp-content/uploads/2024/12/sayma.webp"
                                         alt="Syma Arshad"
-                                        className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700"
+                                        className="w-full h-auto object-cover object-top group-hover:scale-105 transition-transform duration-700"
                                     />
                                 </motion.div>
 
@@ -115,7 +167,7 @@ const Home = () => {
                                     <img
                                         src="https://shemattersofficial.com/wp-content/uploads/2025/01/kamran-1.webp"
                                         alt="Kamran Rizvi"
-                                        className="w-full h-full object-cover"
+                                        className="w-full h-full object-cover object-top"
                                     />
                                 </motion.div>
 
@@ -161,7 +213,7 @@ const Home = () => {
                             <div className="flex flex-wrap gap-12 items-center">
                                 <div className="flex items-center gap-5 group">
                                     <div className="relative">
-                                        <img src="https://shemattersofficial.com/wp-content/uploads/2024/12/sayma.webp" className="w-16 h-16 rounded-full object-cover border-2 border-secondary group-hover:scale-110 transition-transform" alt="Syma Arshad" />
+                                        <img src="https://shemattersofficial.com/wp-content/uploads/2024/12/sayma.webp" className="w-16 h-16 rounded-full object-cover object-top border-2 border-secondary group-hover:scale-110 transition-transform" alt="Syma Arshad" />
                                         <div className="absolute inset-0 rounded-full border border-secondary animate-ping opacity-20 group-hover:opacity-40"></div>
                                     </div>
                                     <div>
@@ -171,7 +223,7 @@ const Home = () => {
                                 </div>
                                 <div className="flex items-center gap-5 group">
                                     <div className="relative">
-                                        <img src="https://shemattersofficial.com/wp-content/uploads/2025/01/kamran-1.webp" className="w-16 h-16 rounded-full object-cover border-2 border-primary/20 group-hover:scale-110 transition-transform" alt="Kamran Rizvi" />
+                                        <img src="https://shemattersofficial.com/wp-content/uploads/2025/01/kamran-1.webp" className="w-16 h-16 rounded-full object-cover object-top border-2 border-primary/20 group-hover:scale-110 transition-transform" alt="Kamran Rizvi" />
                                     </div>
                                     <div>
                                         <p className="font-black text-primary text-lg leading-none mb-1">Kamran Rizvi</p>
@@ -185,7 +237,7 @@ const Home = () => {
             </section>
 
             {/* CTA Box */}
-            <section className="py-32 container">
+            <section className="py-[20px] container">
                 <div className="bg-primary p-16 md:p-32 rounded-[5rem] text-center text-white relative overflow-hidden group">
                     <div className="relative z-10 max-w-4xl mx-auto">
                         <h2 className="text-5xl md:text-8xl font-black mb-12 leading-[0.9] tracking-tighter">Ready to join the <span className="text-gradient brightness-150">movement?</span></h2>
